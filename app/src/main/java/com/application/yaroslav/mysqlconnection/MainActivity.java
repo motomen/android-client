@@ -122,6 +122,7 @@ public class MainActivity extends ActionBarActivity
         if(v.getId()==R.id.button){
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
+            goNewView(v);
         }
     }
 
@@ -176,6 +177,25 @@ public class MainActivity extends ActionBarActivity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
+    public void goNewView(View v){
+        switch (v.getId()) {
+            case R.id.button:
+                // Говорим между какими Activity будет происходить связь
+                Intent intent = new Intent(this, NewActivity.class);
+
+                // указываем первым параметром ключ, а второе значение
+                // по ключу мы будем получать значение с Intent
+                intent.putExtra("format", formatTxt.getText().toString());
+                intent.putExtra("context", contentTxt.getText().toString());
+
+                // показываем новое Activity
+                startActivity(intent);
+                break;
+            default:
+                break;
         }
     }
 

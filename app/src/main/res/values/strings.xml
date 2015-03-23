@@ -13,4 +13,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="click">scan</string>
+    <string name="title_activity_new">NewActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
