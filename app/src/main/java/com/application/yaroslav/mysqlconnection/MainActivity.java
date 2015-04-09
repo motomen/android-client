@@ -184,15 +184,15 @@ public class MainActivity extends ActionBarActivity
         switch (v.getId()) {
             case R.id.button:
                 // Говорим между какими Activity будет происходить связь
-                Intent intent = new Intent(this, NewActivity.class);
-
-                // указываем первым параметром ключ, а второе значение
-                // по ключу мы будем получать значение с Intent
-                intent.putExtra("format", formatTxt.getText().toString());
-                intent.putExtra("context", contentTxt.getText().toString());
-
-                // показываем новое Activity
-                startActivity(intent);
+//                Intent intent = new Intent(this, NewActivity.class);
+//
+//                // указываем первым параметром ключ, а второе значение
+//                // по ключу мы будем получать значение с Intent
+//                intent.putExtra("format", formatTxt.getText().toString());
+//                intent.putExtra("context", contentTxt.getText().toString());
+//
+//                // показываем новое Activity
+//                startActivity(intent);
                 break;
             default:
                 break;
