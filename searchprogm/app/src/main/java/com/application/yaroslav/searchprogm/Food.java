@@ -1,7 +1,6 @@
 package com.application.yaroslav.searchprogm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Yaroslav on 02.05.2015.
@@ -10,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Food {
 
-    @JsonProperty("id_food_tc")
     private String idFood;
 
     private String name;
@@ -29,7 +27,6 @@ public class Food {
 
     private String ingredients;
 
-    @JsonProperty("count_calculate")
     private int countCalculate;
 
     public String getIdFood() {

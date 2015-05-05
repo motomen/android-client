@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
@@ -61,16 +64,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
+
+                    // Set the Accept header
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
+                    HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+
                     String url = "http://192.168.0.101:8080/api/food/get/40907000EAN_8";
 
                     // Create a new Rest Template instance
                     RestTemplate restTemplate = new RestTemplate();
 
-                    Map<String, String> urlVal = new HashMap<>();
-                    urlVal.put("food", "40907000EAN_8");
+                    // Make the HTTP GET request, marshaling the response from JSON to an array of Events
+                    ResponseEntity<Food> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Food.class);
+                    Food events = responseEntity.getBody();
                     // Make the HTTP GET request, marshaling the response to a String
-                    ResponseEntity<Food> result = restTemplate.getForEntity(url, Food.class, urlVal);
-                    String ssr = "";
+
 //            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
 //            scanIntegrator.initiateScan();
 
@@ -102,15 +111,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void goNewView(View v) {
         switch (v.getId()) {
             case R.id.button:
-                // Говорим между какими Activity будет происходить связь
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Activity пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
                 Intent intent = new Intent(this, NewActivity.class);
 
-                // указываем первым параметром ключ, а второе значение
-                // по ключу мы будем получать значение с Intent
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Intent
 //                intent.putExtra("format", formatTxt.getText().toString());
 //                intent.putExtra("context", contentTxt.getText().toString());
 
-                // показываем новое Activity
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Activity
                 startActivity(intent);
                 break;
             default:
