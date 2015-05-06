@@ -24,6 +24,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private Button theButton;
     private TextView formatTxt, contentTxt;
+    Food retryFood = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     ResponseEntity<Food> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Food.class);
                     Food events = responseEntity.getBody();
                     // Make the HTTP GET request, marshaling the response to a String
-
+                    retryFood = events;
 //            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
 //            scanIntegrator.initiateScan();
 
@@ -118,7 +119,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 // �� ����� �� ����� �������� �������� � Intent
 //                intent.putExtra("format", formatTxt.getText().toString());
 //                intent.putExtra("context", contentTxt.getText().toString());
-
+                intent.putExtra("food", retryFood);
                 // ���������� ����� Activity
                 startActivity(intent);
                 break;

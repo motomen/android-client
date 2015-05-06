@@ -2,12 +2,14 @@ package com.application.yaroslav.searchprogm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by Yaroslav on 02.05.2015.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Food {
+public class Food implements Serializable{
 
     private String idFood;
 
