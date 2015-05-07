@@ -7,7 +7,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.view.View;
@@ -70,6 +72,7 @@ public class NewActivity extends Activity {
                 break;
         }
     }
+
     private ClickableSpan getClickableSpan(final String word) {
         return new ClickableSpan() {
             private TextPaint ds;
@@ -96,7 +99,6 @@ public class NewActivity extends Activity {
     }
 
     private void prepareIngredientForTextView(String val) {
-        Spannable spans = Spannable.Factory.getInstance().newSpannable(ingredients.getText());
         String Ingredients = val;
         String notUsedString = "";
         String ingredientBefore = "";
@@ -112,25 +114,22 @@ public class NewActivity extends Activity {
             Ingredients = Ingredients.replace("</span> ", "");
         }
 
+        SpannableString ss = new SpannableString(Ingredients);
+
         // get all ingredient for String Ingredients
         // maybe symbol ", . :"
         for (String ingredient : Ingredients.split(",")) {
             // if ingredient contains :
             // example chocolate: cacao
-            start += end;
-
-            if (ingredient.contains(" ")) {
-                ingredient = ingredient.replace(" ", "_");
-            }
 
             if (ingredient.contains(":") && !ingredient.contains(".")) {
                 notUsedString = ingredient.substring(0, ingredient.lastIndexOf(": ") + 2);
                 ingredient = ingredient.replace(notUsedString, "");
-                start += notUsedString.length();
-                end += start + ingredient.length();
+                start = Ingredients.indexOf(ingredient);
+                end = start + ingredient.length();
 
                 ClickableSpan clickSpan = getClickableSpan(ingredient);
-                spans.setSpan(clickSpan, start, end,
+                ss.setSpan(clickSpan, start, end,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 continue;
             }
@@ -143,17 +142,16 @@ public class NewActivity extends Activity {
                 ingredient = ingredient.replace(notUsedString, "");
                 ingredientAfter = ingredient.replace(notUsedString, "");
 
-                start += notUsedString.length();
-                end += start + ingredientBefore.length();
+                start = Ingredients.indexOf(ingredientBefore);
+                end = start + ingredientBefore.length();
                 ClickableSpan clickSpan = getClickableSpan(ingredientBefore);
-                spans.setSpan(clickSpan, start, end,
+                ss.setSpan(clickSpan, start, end,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                start = end + notUsedString.length();
+                start = Ingredients.indexOf(ingredientAfter);
                 end = start + ingredientAfter.length();
-
                 clickSpan = getClickableSpan(ingredientAfter);
-                spans.setSpan(clickSpan, start, end,
+                ss.setSpan(clickSpan, start, end,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 continue;
             }
@@ -161,17 +159,21 @@ public class NewActivity extends Activity {
             if (ingredient.contains(".") && !ingredient.contains(":")) {
                 ingredientBefore = ingredient.substring(0, ingredient.lastIndexOf("."));
                 ingredient = ingredientBefore.replace(ingredientBefore, ingredientBefore.substring(1, ingredientBefore.length()));
-                end += ingredient.length();
+                start = Ingredients.indexOf(ingredient);
+                end = start + ingredient.length();
                 ClickableSpan clickSpan = getClickableSpan(ingredient);
-                spans.setSpan(clickSpan, start, end,
+                ss.setSpan(clickSpan, start, end,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 break;
             }
 
-            end += ingredient.length();
+            start = Ingredients.indexOf(ingredient);
+            end = start + ingredient.length();
             ClickableSpan clickSpan = getClickableSpan(ingredient);
-            spans.setSpan(clickSpan, start, end,
+            ss.setSpan(clickSpan, start, end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
+        ingredients.setText(ss);
+        ingredients.setMovementMethod(LinkMovementMethod.getInstance());
     }
 }
