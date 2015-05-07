@@ -173,6 +173,7 @@ public class NewActivity extends Activity {
             ss.setSpan(clickSpan, start, end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
+
         ingredients.setText(ss);
         ingredients.setMovementMethod(LinkMovementMethod.getInstance());
     }
