@@ -8,7 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,18 +26,21 @@ import java.util.Collections;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Button theButton;
-    private TextView formatTxt, contentTxt;
-    Food retryFood = null;
+    private Button search;
+    private Food retryFood = null;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        theButton = (Button) findViewById(R.id.button);
+        theButton = (Button) findViewById(R.id.bsearch);
         theButton.setOnClickListener(this);
-        formatTxt = (TextView) findViewById(R.id.scan_format);
-        contentTxt = (TextView) findViewById(R.id.scan_content);
+        search = (Button) findViewById(R.id.button);
+        search.setOnClickListener(this);
+
+        editText = (EditText) findViewById(R.id.editText);
     }
 
     @Override
@@ -61,28 +67,27 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(final View v) {
-        if (v.getId() == R.id.button) {
+        if (v.getId() == R.id.bsearch) {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
+                    if (editText.getText().toString().length() != 0) {
+                        // Set the Accept header
+                        HttpHeaders requestHeaders = new HttpHeaders();
+                        requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
+                        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
 
-                    // Set the Accept header
-                    HttpHeaders requestHeaders = new HttpHeaders();
-                    requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
-                    HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+                        String url = "http://192.168.0.101:8080/api/food/get/" + editText.getText().toString(); //40907000EAN_8
 
-                    String url = "http://192.168.0.101:8080/api/food/get/40907000EAN_8";
+                        // Create a new Rest Template instance
+                        RestTemplate restTemplate = new RestTemplate();
 
-                    // Create a new Rest Template instance
-                    RestTemplate restTemplate = new RestTemplate();
-
-                    // Make the HTTP GET request, marshaling the response from JSON to an array of Events
-                    ResponseEntity<Food> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Food.class);
-                    Food events = responseEntity.getBody();
-                    // Make the HTTP GET request, marshaling the response to a String
-                    retryFood = events;
-//            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-//            scanIntegrator.initiateScan();
+                        // Make the HTTP GET request, marshaling the response from JSON to an array of Events
+                        ResponseEntity<Food> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Food.class);
+                        Food events = responseEntity.getBody();
+                        // Make the HTTP GET request, marshaling the response to a String
+                        retryFood = events;
+                    }
 
                     return null;
                 }
@@ -93,35 +98,30 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
             }.execute(null, null, null);
         }
+
+        if (v.getId() == R.id.button) {
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator.initiateScan();
+        }
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-//        if (scanningResult != null) {
-//            String scanContent = scanningResult.getContents();
-//            String scanFormat = scanningResult.getFormatName();
-//            formatTxt.setText("FORMAT: " + scanFormat);
-//            contentTxt.setText("CONTENT: " + scanContent);
-//        } else{
-//            Toast toast = Toast.makeText(getApplicationContext(),
-//                    "No scan data received!", Toast.LENGTH_SHORT);
-//            toast.show();
-//        }
-//    }
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanningResult != null) {
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            editText.setText(scanContent+scanFormat);
+        }
+    }
 
     public void goNewView(View v) {
         switch (v.getId()) {
-            case R.id.button:
-                // ������� ����� ������ Activity ����� ����������� �����
-                Intent intent = new Intent(this, NewActivity.class);
-
-                // ��������� ������ ���������� ����, � ������ ��������
-                // �� ����� �� ����� �������� �������� � Intent
-//                intent.putExtra("format", formatTxt.getText().toString());
-//                intent.putExtra("context", contentTxt.getText().toString());
-                intent.putExtra("food", retryFood);
-                // ���������� ����� Activity
-                startActivity(intent);
+            case R.id.bsearch:
+                if (retryFood != null) {
+                    Intent intent = new Intent(this, NewActivity.class);
+                    intent.putExtra("food", retryFood);
+                    startActivity(intent);
+                }
                 break;
             default:
                 break;
