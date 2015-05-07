@@ -41,25 +41,12 @@ public class NewActivity extends Activity {
 
         nameFood.setText(nameFood.getText().toString() + " " + food.getName());
         String StrIngredient = food.getIngredients();
-//        if (StrIngredient.contains("<span>")) {
-//            StrIngredient = StrIngredient.replace("<span>", "");
-//        }
-//
-//        if (StrIngredient.contains("</span> ")) {
-//            StrIngredient = StrIngredient.replace("</span> ", "");
-//        }
+
         prepareIngredientForTextView(StrIngredient);
-       // ingredients.setText(ingredients.getText().toString() + " " + StrIngredient);
 
         byte[] decodedString = Base64.decode(food.getPhoto(), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         photo.setImageBitmap(decodedByte);
-
-//        // выводим принятое имя
-//        name.setText(name.getText().toString() + " " + txtName);
-//
-//        // Выводим принятую фамилию
-//        lastName.setText(lastName.getText().toString() + " " + txtLastname);
     }
 
     public void back(View v){
