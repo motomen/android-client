@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
@@ -17,6 +18,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+
 /**
  * Created by Yaroslav on 02.05.2015.
  */
@@ -27,6 +37,7 @@ public class NewActivity extends Activity {
     private TextView ingredients;
     private TextView nameFood;
     private ImageView photo;
+    private Ingredient retryIngredient;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +60,7 @@ public class NewActivity extends Activity {
         photo.setImageBitmap(decodedByte);
     }
 
-    public void back(View v){
+    public void back(View v) {
         switch (v.getId()) {
             case R.id.back_button:
                 Intent intent = new Intent(this, MainActivity.class);
@@ -66,7 +77,34 @@ public class NewActivity extends Activity {
 
             @Override
             public void onClick(View widget) {
-                // go new activity aQuery.show(createAddingDialog(word));
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        // Set the Accept header
+                        HttpHeaders requestHeaders = new HttpHeaders();
+                        requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
+                        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+
+                        String url = "http://192.168.0.101:8080/api/ingredient/get/" + word; //40907000EAN_8
+
+                        // Create a new Rest Template instance
+                        RestTemplate restTemplate = new RestTemplate();
+
+                        // Make the HTTP GET request, marshaling the response from JSON to an array of Events
+                        ResponseEntity<Ingredient> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Ingredient.class);
+                        Ingredient events = responseEntity.getBody();
+                        // Make the HTTP GET request, marshaling the response to a String
+                        retryIngredient = events;
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        goNewView();
+                    }
+                }.execute(null, null, null);
+
                 changeSpanBgColor(widget);
             }
 
@@ -83,6 +121,14 @@ public class NewActivity extends Activity {
                 ds.setARGB(150, 0, 0, 0);
             }
         };
+    }
+
+    public void goNewView() {
+        if (retryIngredient != null) {
+            Intent intent = new Intent(this, IngredientActivity.class);
+            intent.putExtra("ingredient", retryIngredient);
+            startActivity(intent);
+        }
     }
 
     private void prepareIngredientForTextView(String val) {
