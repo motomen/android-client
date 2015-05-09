@@ -16,8 +16,10 @@ import com.google.zxing.integration.android.IntentResult;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -83,10 +85,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         RestTemplate restTemplate = new RestTemplate();
 
                         // Make the HTTP GET request, marshaling the response from JSON to an array of Events
-                        ResponseEntity<Food> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Food.class);
-                        Food events = responseEntity.getBody();
-                        // Make the HTTP GET request, marshaling the response to a String
-                        retryFood = events;
+                        try {
+                            ResponseEntity<Food> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Food.class);
+                            HttpStatus httpStatus = responseEntity.getStatusCode(); // this for not found elem in database
+                            Food events = responseEntity.getBody();
+                            // Make the HTTP GET request, marshaling the response to a String
+                            retryFood = events;
+                        } catch (HttpClientErrorException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     return null;
@@ -120,6 +127,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 if (retryFood != null) {
                     Intent intent = new Intent(this, NewActivity.class);
                     intent.putExtra("food", retryFood);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, NotFoundActivity.class);
                     startActivity(intent);
                 }
                 break;
