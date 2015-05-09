@@ -12,4 +12,6 @@
     <string name="ingredients">Інгредієнти:</string>
     <string name="back">Назад</string>
     <string name="information">Інформація:</string>
+    <string name="links">Посилання: </string>
+    <string name="not_found">Ой :( \n Нічого не знайдено</string>
 </resources>

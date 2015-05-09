@@ -18,6 +18,7 @@ public class IngredientActivity extends Activity {
     private TextView name;
     private TextView information;
     private ImageView photo;
+    private TextView links;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ public class IngredientActivity extends Activity {
         name = (TextView) findViewById(R.id.name_ingredient);
         information = (TextView) findViewById(R.id.information);
         photo = (ImageView) findViewById(R.id.ingredientView);
-
+        links = (TextView) findViewById(R.id.links);
         Ingredient ingredient = (Ingredient) getIntent().getSerializableExtra("ingredient");
 
         name.setText(name.getText() + " " + ingredient.getNameIngredient());
@@ -34,9 +35,17 @@ public class IngredientActivity extends Activity {
         byte[] decodedString = Base64.decode(ingredient.getPhoto(), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         photo.setImageBitmap(decodedByte);
+
+        if (ingredient.getLinkList().size() > 0) {
+            for (int i = 0; i < ingredient.getLinkList().size(); i++) {
+                links.setText(links.getText() + ingredient.getLinkList().get(i).getAddress() + "\n");
+            }
+        } else {
+            links.setVisibility(View.INVISIBLE);
+        }
     }
 
-    public void back(View v){
+    public void back(View v) {
         switch (v.getId()) {
             case R.id.back_button:
                 Intent intent = new Intent(this, NewActivity.class);

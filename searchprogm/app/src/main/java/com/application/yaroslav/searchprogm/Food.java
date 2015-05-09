@@ -31,6 +31,10 @@ public class Food implements Serializable{
 
     private int countCalculate;
 
+    private Boolean gmo;
+
+    private Boolean conservant;
+
     public String getIdFood() {
         return idFood;
     }
@@ -109,5 +113,21 @@ public class Food implements Serializable{
 
     public void setCountCalculate(int countCalculate) {
         this.countCalculate = countCalculate;
+    }
+
+    public Boolean isGmo() {
+        return gmo;
+    }
+
+    public void setGmo(Boolean gmo) {
+        this.gmo = gmo;
+    }
+
+    public Boolean isConservant() {
+        return conservant;
+    }
+
+    public void setConservant(Boolean conservant) {
+        this.conservant = conservant;
     }
 }

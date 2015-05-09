@@ -85,7 +85,7 @@ public class NewActivity extends Activity {
                         requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
                         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
 
-                        String url = "http://192.168.0.101:8080/api/ingredients/get?name=" + word; //40907000EAN_8
+                        String url = "http://192.168.43.105:8080/api/ingredients/get?name=" + word; //40907000EAN_8
 
                         // Create a new Rest Template instance
                         RestTemplate restTemplate = new RestTemplate();

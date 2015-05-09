@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewActivity"/>
-        <activity android:name=".IngredientActivity"/>
+        <activity android:name=".IngredientActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".NotFoundActivity"/>
     </application>
 
 </manifest>
