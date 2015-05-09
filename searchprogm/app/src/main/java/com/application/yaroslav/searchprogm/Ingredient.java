@@ -17,6 +17,8 @@ public class Ingredient implements Serializable {
 
     private String description;
 
+    private Boolean bad;
+
     private List<Link> linkList;
 
     public String getNameIngredient() {
@@ -49,5 +51,13 @@ public class Ingredient implements Serializable {
 
     public void setLinkList(List<Link> linkList) {
         this.linkList = linkList;
+    }
+
+    public Boolean isBad() {
+        return bad;
+    }
+
+    public void setBad(Boolean bad) {
+        this.bad = bad;
     }
 }
