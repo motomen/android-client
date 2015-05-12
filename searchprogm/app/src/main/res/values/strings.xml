@@ -14,4 +14,9 @@
     <string name="information">Інформація:</string>
     <string name="links">Посилання: </string>
     <string name="not_found">Ой :( \n Нічого не знайдено</string>
+    <string name="category">Переглянути каталог</string>
+    <string name="protein">Білки: </string>
+    <string name="fats">Жири: </string>
+    <string name="carbs">Вуглеводи: </string>
+    <string name="kcal">Кіло калорій: </string>
 </resources>

@@ -1,5 +1,6 @@
 package com.application.yaroslav.searchprogm;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.application.yaroslav.searchprogm.entity.CategoryItem;
+import com.application.yaroslav.searchprogm.entity.Food;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -22,15 +25,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
+    private final String partUrl = "http://192.168.0.101:8080";
     private Button theButton;
     private Button search;
+    private Button catalog;
     private Food retryFood = null;
     private EditText editText;
+    private ArrayList<CategoryItem> categoryItems = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         theButton.setOnClickListener(this);
         search = (Button) findViewById(R.id.button);
         search.setOnClickListener(this);
+        catalog = (Button) findViewById(R.id.catalog_button);
+        catalog.setOnClickListener(this);
 
         editText = (EditText) findViewById(R.id.editText);
     }
@@ -79,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
                         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
 
-                        String url = "http://192.168.43.105:8080/api/food/get/" + editText.getText().toString(); //40907000EAN_8
+                        String url = partUrl + "/api/food/get/" + editText.getText().toString(); //40907000EAN_8
 
                         // Create a new Rest Template instance
                         RestTemplate restTemplate = new RestTemplate();
@@ -110,6 +119,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
         }
+
+        if (v.getId() == R.id.catalog_button) {
+            goNewView();
+        }
+    }
+
+    public void goNewView() {
+    //    if (categoryItems != null) {
+         //   Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+       //     intent.putExtra("listCategory", categoryItems);
+         //   startActivity(intent);
+     //   }
+        CategoryActivity categoryActivity = new CategoryActivity();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.itemListFragment, categoryActivity);
+        ft.commit();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -117,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
-            editText.setText(scanContent+scanFormat);
+            editText.setText(scanContent + scanFormat);
         }
     }
 

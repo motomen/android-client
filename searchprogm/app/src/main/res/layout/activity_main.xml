@@ -11,7 +11,7 @@
         android:text="@string/click"
         android:id="@+id/button"
         android:layout_gravity="center"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/catalog_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -54,11 +54,10 @@
         android:text="@string/search"
         android:id="@+id/bsearch"
         android:layout_below="@+id/editText"
-        android:layout_marginTop="44dp"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/editText"
+        android:layout_alignEnd="@+id/editText" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,7 +65,20 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/or"
         android:id="@+id/textView3"
-        android:layout_above="@+id/button"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/bsearch"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/catalog_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button"
+        android:text="@string/category"
+        android:visibility="invisible" />
 
 </RelativeLayout>

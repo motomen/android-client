@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.application.yaroslav.searchprogm.entity.Ingredient;
+
 /**
  * Created by Yaroslav on 08.05.2015.
  */

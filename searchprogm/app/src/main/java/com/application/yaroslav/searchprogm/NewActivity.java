@@ -18,6 +18,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.application.yaroslav.searchprogm.entity.Food;
+import com.application.yaroslav.searchprogm.entity.Ingredient;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,11 +36,25 @@ import java.util.Collections;
 
 public class NewActivity extends Activity {
 
+    private final String partUrl = "http://192.168.0.101:8080";
+
     private Button back;
+
     private TextView ingredients;
+
     private TextView nameFood;
+
     private ImageView photo;
+
     private Ingredient retryIngredient;
+
+    private TextView kcal;
+
+    private TextView protein;
+
+    private TextView carbs;
+
+    private TextView fats;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +64,14 @@ public class NewActivity extends Activity {
         ingredients = (TextView) findViewById(R.id.ingredients);
         nameFood = (TextView) findViewById(R.id.namefood);
         photo = (ImageView) findViewById(R.id.foodView);
+        kcal = (TextView) findViewById(R.id.kcal);
+        protein = (TextView) findViewById(R.id.protein);
+        carbs = (TextView) findViewById(R.id.carbs);
+        fats = (TextView) findViewById(R.id.fats);
 
         Food food = (Food) getIntent().getSerializableExtra("food");
 
+        kcal.setText(kcal.getText().toString() + food.getKcal().toString());
         nameFood.setText(nameFood.getText().toString() + " " + food.getName());
         String StrIngredient = food.getIngredients();
 
@@ -58,6 +80,10 @@ public class NewActivity extends Activity {
         byte[] decodedString = Base64.decode(food.getPhoto(), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         photo.setImageBitmap(decodedByte);
+
+        protein.setText(food.getProtein().toString());
+        fats.setText(food.getFats().toString());
+        carbs.setText(food.getCarbs().toString());
     }
 
     public void back(View v) {
@@ -85,7 +111,7 @@ public class NewActivity extends Activity {
                         requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
                         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
 
-                        String url = "http://192.168.43.105:8080/api/ingredients/get?name=" + word; //40907000EAN_8
+                        String url = partUrl + "/api/ingredients/get?name=" + word; //40907000EAN_8
 
                         // Create a new Rest Template instance
                         RestTemplate restTemplate = new RestTemplate();

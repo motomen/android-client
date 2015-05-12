@@ -1,4 +1,4 @@
-package com.application.yaroslav.searchprogm;
+package com.application.yaroslav.searchprogm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
