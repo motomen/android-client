@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.application.yaroslav.searchprogm.entity.CategoryItem;
 import com.application.yaroslav.searchprogm.entity.Food;
+import com.application.yaroslav.searchprogm.util.Constant;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -31,7 +32,7 @@ import java.util.Collections;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
-    private final String partUrl = "http://192.168.0.101:8080";
+    private String partUrl = Constant.url;
     private Button theButton;
     private Button search;
     private Button catalog;
@@ -88,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
                         HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
 
-                        String url = partUrl + "/api/food/get/" + editText.getText().toString(); //40907000EAN_8
+                        String url = partUrl + "/api/food/get/" + editText.getText().toString().trim(); //40907000EAN_8
 
                         // Create a new Rest Template instance
                         RestTemplate restTemplate = new RestTemplate();

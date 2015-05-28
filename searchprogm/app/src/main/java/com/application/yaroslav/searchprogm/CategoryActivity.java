@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.application.yaroslav.searchprogm.entity.CategoryItem;
 import com.application.yaroslav.searchprogm.entity.CategoryItemAdapter;
+import com.application.yaroslav.searchprogm.util.Constant;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,13 +27,12 @@ import java.util.Collections;
  */
 public class CategoryActivity extends ListFragment {
 
-    private final String partUrl = "http://192.168.0.102:8080";
+    private String partUrl = Constant.url;
     ArrayList<CategoryItem> items;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        // = (ArrayList<CategoryItem>) getActivity().getIntent().getSerializableExtra("listCategory");
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
