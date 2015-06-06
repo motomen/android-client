@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.application.yaroslav.searchprogm.entity.Food;
 import com.application.yaroslav.searchprogm.entity.Ingredient;
+import com.application.yaroslav.searchprogm.speedometer.Speedometer;
 import com.application.yaroslav.searchprogm.util.Constant;
 
 import org.springframework.http.HttpEntity;
@@ -60,6 +61,7 @@ public class NewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_food);
+        final Speedometer speedometer = (Speedometer) findViewById(R.id.Speedometer);
 
         back = (Button) findViewById(R.id.back_button);
         ingredients = (TextView) findViewById(R.id.ingredients);
@@ -69,8 +71,9 @@ public class NewActivity extends Activity {
         protein = (TextView) findViewById(R.id.protein);
         carbs = (TextView) findViewById(R.id.carbs);
         fats = (TextView) findViewById(R.id.fats);
-
         Food food = (Food) getIntent().getSerializableExtra("food");
+
+        speedometer.setCurrentSpeed(food.getRating().floatValue());
 
         kcal.setText(kcal.getText().toString() + food.getKcal().toString());
         nameFood.setText(nameFood.getText().toString() + " " + food.getName());
